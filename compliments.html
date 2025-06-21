@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sweet Compliments</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .compliment-carousel {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem auto;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .compliment-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.2rem;
+            color: var(--deep-purple);
+            line-height: 1.6;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+        
+        .compliment-text.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(139, 90, 159, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background: var(--deep-purple);
+            transform: scale(1.2);
+        }
+        
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        .control-btn {
+            background: var(--primary-pink);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .control-btn:hover {
+            background: var(--rose-gold);
+            transform: translateY(-2px);
+        }
+        
+        .floating-hearts-compliment {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .heart-float {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: floatHeart 4s infinite linear;
+        }
+        
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(100%) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100%) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">💕</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="love-letter.html">Letter</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="reasons.html">Reasons</a></li>
+                <li><a href="future.html">Future</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+                <li><a href="garden.html">Garden</a></li>
+                <li><a href="memories.html">Memories</a></li>
+                <li><a href="compliments.html">Compliments</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+        <audio id="backgroundMusic" loop autoplay>
+        <source src="assets/audio/GlueSong.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="music-toggle" id="musicToggle">
+        <span class="music-icon">🎵</span>
+        </div>
+
+
+
+    <div class="page-container">
+        <div class="page-content">
+            <h1 class="page-title">About you</h1>
+            <p style="text-align: center; margin-bottom: 2rem; color: var(--text-light);">I want to tell you how amazing you are ✨</p>
+            
+            <div class="compliment-carousel">
+                <div class="floating-hearts-compliment" id="floatingHearts"></div>
+                <div class="compliment-text" id="complimentText">
+                    <!-- Compliments will appear here -->
+                </div>
+            </div>
+            
+            <div class="carousel-dots" id="carouselDots">
+                <!-- Dots will be generated by JavaScript -->
+            </div>
+            
+            <div class="carousel-controls">
+                <button class="control-btn" onclick="previousCompliment()">Previous</button>
+                <button class="control-btn" onclick="toggleAutoPlay()">Pause</button>
+                <button class="control-btn" onclick="nextCompliment()">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const music = document.getElementById('backgroundMusic');
+        const musicToggle = document.getElementById('musicToggle');
+
+        window.addEventListener('load', () => {
+            music.volume = 0.5;
+
+            // Try to autoplay (some browsers require interaction)
+            const playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // Autoplay might fail silently on first visit
+                    console.log('Autoplay blocked by browser.');
+                });
+            }
+        });
+
+        musicToggle.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                musicToggle.innerHTML = '<span class="music-icon">🎵</span>';
+            } else {
+                music.pause();
+                musicToggle.innerHTML = '<span class="music-icon">🔇</span>';
+            }
+        });
+
+
+        const compliments = [
+        "You are the sweetest soul I've ever known",
+        "I have lost my count of how many times I have fell for your cute smile, it makes me go crazyy",
+        "You are so Strong and Brave, I am so proud of you bb",
+        "Your voice has become my favorite sound ever",
+        "I’ve fallen in love with your eyes more times than I can count",
+        "The way you laugh? I loooove it and I love to make you laugh",
+        "You make every little thing feel worth it",
+        "You aren’t just in my heart, you’re in my daily thoughts, everywhere",
+        "You motivate me and to push myself to my limits and work harder everyday",
+        "I feel SO proud, not just lucky, to love someone like you and to call you mine",
+        "Even silence feels full when it’s with you",
+        "You never ask for anything, yet you’ve given me everything",
+        "Your insecurities are my favoutite things about you, I'd kiss them and call you miiine",
+        "I’ve met so many versions of you, and somehow I’ve fallen for every single one",
+        "I miss you :(",
+        "And I love youuuuu <333"
+        ];
+
+        let currentComplimentIndex = 0;
+        let autoPlayInterval;
+        let isAutoPlaying = true;
+
+        function createDots() {
+            const dotsContainer = document.getElementById('carouselDots');
+            compliments.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => showCompliment(index));
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function updateDots() {
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentComplimentIndex);
+            });
+        }
+
+        function showCompliment(index) {
+            const complimentElement = document.getElementById('complimentText');
+            
+            // Fade out current compliment
+            complimentElement.classList.remove('visible');
+            
+            setTimeout(() => {
+                // Update text and fade in
+                complimentElement.textContent = compliments[index];
+                complimentElement.classList.add('visible');
+                currentComplimentIndex = index;
+                updateDots();
+            }, 1000);
+        }
+
+        function nextCompliment() {
+            const nextIndex = (currentComplimentIndex + 1) % compliments.length;
+            showCompliment(nextIndex);
+        }
+
+        function previousCompliment() {
+            const prevIndex = currentComplimentIndex === 0 ? compliments.length - 1 : currentComplimentIndex - 1;
+            showCompliment(prevIndex);
+        }
+
+
+
+        function toggleAutoPlay() {
+            const button = event.target;
+            
+            if (isAutoPlaying) {
+                stopAutoPlay();
+                button.textContent = 'Play';
+            } else {
+                startAutoPlay();
+                button.textContent = 'Pause';
+            }
+        }
+
+        function createFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% chance every interval
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-float';
+                    heart.innerHTML = '💖';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDuration = (3 + Math.random() * 2) + 's';
+                    container.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 5000);
+                }
+            }, 2000);
+        }
+
+        // Initialize carousel
+        window.addEventListener('load', () => {
+            createDots();
+            showCompliment(0);
+            startAutoPlay();
+            createFloatingHearts();
+        });
+    </script>
+</body>
+</html>

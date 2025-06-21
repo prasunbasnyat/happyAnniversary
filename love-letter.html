@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Letter</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500&family=Patrick+Hand&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">💕</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="love-letter.html">Letter</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="reasons.html">Reasons</a></li>
+                <li><a href="future.html">Future</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+                <li><a href="garden.html">Garden</a></li>
+                <li><a href="memories.html">Memories</a></li>
+                <li><a href="compliments.html">Compliments</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-content">
+            <h1 class="page-title">Words From My Heart</h1>
+            <div class="letter-container">
+                <div class="letter-content" id="letterContent">
+                    <span class="typing-cursor">|</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <audio id="backgroundMusic" loop autoplay>
+        <source src="assets/audio/apocalypse.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="music-toggle" id="musicToggle">
+        <span class="music-icon">🎵</span>
+        </div>
+
+    <script>
+        
+        const music = document.getElementById('backgroundMusic');
+        const musicToggle = document.getElementById('musicToggle');
+
+        window.addEventListener('load', () => {
+            music.volume = 0.5;
+
+            // Try to autoplay (some browsers require interaction)
+            const playPromise = music.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(() => {
+                    // Autoplay might fail silently on first visit
+                    console.log('Autoplay blocked by browser.');
+                });
+            }
+        });
+
+        musicToggle.addEventListener('click', () => {
+            if (music.paused) {
+                music.play();
+                musicToggle.innerHTML = '<span class="music-icon">🎵</span>';
+            } else {
+                music.pause();
+                musicToggle.innerHTML = '<span class="music-icon">🔇</span>';
+            }
+        });
+
+        const letterText = `Hi Pookie,
+
+Please play the music from bottom right side first ;)                                                   
+
+I don’t even know where to begin. I’ve been thinking about you all day, and everything I write feels too small compared to what I actually feel. But I’ll try.
+
+I know I’ve told you I love you before… probably a million times, but none of those “I love yous” can really explain how much I love youuu. You have loved me sm without expecting anything back. You mean so much more to me than I can explain.
+
+Sometimes I just sit and think about how we got here, from random Facebook chats to Loving each other infinitely (well, I know... but anyways), sharing the weirdest stories, making each other laugh, and somehow making this whole long-distance thing feel like nothing.
+
+You don’t have to be perfect for me. You already are. I love the most cute beautiful and gorgeous side of yours, quiet side of you, the chaotic side, the strong, silly, sensitive, soft, stubborn side, and yes, this side too, all of you baby. I love when you overthink, when you smile without meaning to, when you say dumb things and when you make me feel dumb with your smartest talks.
+
+I don’t care how long it takes or how far we are. I’m yours. I’m here. I’ll always be here.
+
+I love you, more than ever!,  
+Your bb`;
+
+
+        function typeWriter(text, element, speed = 20) {
+            let i = 0;
+            element.innerHTML = '<span class="typing-cursor">|</span>';
+            
+            function type() {
+                if (i < text.length) {
+                    const currentText = text.slice(0, i + 1);
+                    element.innerHTML = currentText + '<span class="typing-cursor">|</span>';
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Remove cursor when done
+                    element.innerHTML = text;
+                }
+            }
+            
+            type();
+        }
+
+        // Start typing animation when page loads
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const letterElement = document.getElementById('letterContent');
+                typeWriter(letterText, letterElement, 150);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

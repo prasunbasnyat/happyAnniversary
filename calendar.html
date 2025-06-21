@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Love Calendar</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .calendar-nav {
+            background: var(--primary-pink);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-nav:hover {
+            background: var(--rose-gold);
+            transform: translateY(-2px);
+        }
+        
+        .calendar-month {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: var(--deep-purple);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            color: var(--deep-purple);
+            padding: 1rem 0;
+            font-size: 0.9rem;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            min-height: 60px;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(255, 193, 204, 0.2);
+        }
+        
+        .calendar-day.today {
+            background: var(--primary-pink);
+            color: white;
+        }
+        
+        .calendar-day.special {
+            background: linear-gradient(45deg, var(--soft-lavender), var(--rose-gold));
+            color: var(--deep-purple);
+            font-weight: bold;
+        }
+        
+        .calendar-day.anniversary {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            color: white;
+            font-weight: bold;
+        }
+        
+        .event-emoji {
+            font-size: 1.2rem;
+            margin-top: 0.2rem;
+        }
+        
+        .countdown-container {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 2rem;
+            background: linear-gradient(45deg, var(--cream-white), var(--soft-lavender));
+            border-radius: 15px;
+        }
+        
+        .countdown-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 1.8rem;
+            color: var(--deep-purple);
+            margin-bottom: 1rem;
+        }
+        
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-unit {
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            min-width: 80px;
+        }
+        
+        .countdown-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--deep-purple);
+        }
+        
+        .countdown-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">💕</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="love-letter.html">Letter</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="reasons.html">Reasons</a></li>
+                <li><a href="future.html">Future</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+                <li><a href="garden.html">Garden</a></li>
+                <li><a href="memories.html">Memories</a></li>
+                <li><a href="compliments.html">Compliments</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-content">
+            <h1 class="page-title">Our Love Calendar</h1>
+            
+            <div class="countdown-container">
+                <div class="countdown-title">Time Since We Started This Journey</div>
+                <div class="countdown-display" id="countdownDisplay">
+                    <!-- Countdown will be displayed here -->
+                </div>
+            </div>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button class="calendar-nav" onclick="changeMonth(-1)">‹ Previous</button>
+                    <div class="calendar-month" id="calendarMonth">
+                        <!-- Month will be displayed here -->
+                    </div>
+                    <button class="calendar-nav" onclick="changeMonth(1)">Next ›</button>
+                </div>
+                
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+        const anniversaryDate = new Date('2019-03-31'); // anniversary date
+        
+        const monthNames = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        const specialEvents = {
+            '2019-03-31': { emoji: '💬', name: "First 'Hi'" },
+            '2023-06-29': { emoji: '💍', name: 'Proposal & Relationship Start' }
+        };
+
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = now - anniversaryDate;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            const display = document.getElementById('countdownDisplay');
+            display.innerHTML = `
+                <div class="countdown-unit">
+                    <div class="countdown-number">${days}</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-unit">
+                    <div class="countdown-number">${hours}</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-unit">
+                    <div class="countdown-number">${minutes}</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-unit">
+                    <div class="countdown-number">${seconds}</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            `;
+        }
+
+        function generateCalendar() {
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            // Update month display
+            document.getElementById('calendarMonth').textContent = `${monthNames[month]} ${year}`;
+            
+            // Clear calendar grid
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            
+            // Add day headers
+            dayNames.forEach(day => {
+                const header = document.createElement('div');
+                header.className = 'calendar-day-header';
+                header.textContent = day;
+                grid.appendChild(header);
+            });
+            
+            // Get first day of month and number of days
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            
+            // Add empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day';
+                grid.appendChild(emptyDay);
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // Check if it's today
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Check for special events
+                if (specialEvents[dateString]) {
+                    const event = specialEvents[dateString];
+                    dayElement.classList.add('special');
+                    dayElement.innerHTML = `
+                        <div>${day}</div>
+                        <div class="event-emoji">${event.emoji}</div>
+                    `;
+                    dayElement.title = event.name;
+                } else {
+                    dayElement.textContent = day;
+                }
+                
+                // Check if it's anniversary
+                const dayDate = new Date(year, month, day);
+                if (dayDate.getDate() === 29 && dayDate.getMonth() === 5) { // June = 5
+                    dayElement.classList.add('anniversary');
+                }
+
+                
+                grid.appendChild(dayElement);
+            }
+        }
+
+        function changeMonth(direction) {
+            currentDate.setMonth(currentDate.getMonth() + direction);
+            generateCalendar();
+        }
+
+        // Initialize calendar and countdown
+        window.addEventListener('load', () => {
+            generateCalendar();
+            updateCountdown();
+            setInterval(updateCountdown, 1000); // Update countdown every second
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Future Together</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500&family=Patrick+Hand&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">💕</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="love-letter.html">Letter</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="reasons.html">Reasons</a></li>
+                <li><a href="future.html">Future</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+                <li><a href="garden.html">Garden</a></li>
+                <li><a href="memories.html">Memories</a></li>
+                <li><a href="compliments.html">Compliments</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-content">
+            <h1 class="page-title">Glimpses of Our Future</h1>
+            <p style="text-align: center; margin-bottom: 3rem; color: var(--text-light);">Touch on the crystal ball to see our beautiful future together ✨</p>
+            
+            <div class="crystal-ball-container">
+                <div class="crystal-ball" id="crystalBall"></div>
+                <div class="vision-text" id="visionText">
+                    Click the crystal ball to see our future...
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    const allVisions = [
+        "Me finally putting eyeliner on your eyes because we promised (signed actually)",
+        "Cooking dinner together, arguing about too much salt, then laughing anyway",
+        "Waking up late on a Saturday, doing nothing, and still feeling full",
+        "Dancing slowly in our living room with no music playing",
+        "Getting annoyed at each other in the car, but still holding hands later",
+        "Going grocery shopping and turning it into a whole date somehow",
+        "Flying to a new country just because we felt like it",
+        "Helping each other through bad days without needing to say much",
+        "Crying together quietly when life feels heavy, and then picking each other up",
+        "Owning a little cozy café together where I make the coffee and you design the space",
+        "Fighting over what to watch, then falling asleep to neither",
+        "Lying in bed in the dark, just talking about stupid things and feeling safe",
+        "Walking through our future house before it's even built, naming every room",
+        "Sending memes to each other from the next room",
+        "Celebrating small wins like they’re huge, because we know they matter",
+        "Getting featured in a documentary about crazy beautiful love stories",
+        "Visiting home and realizing we became each other’s home",
+        "Making big life decisions, scared as hell, but doing it together anyway",
+        "Growing old and weird together, being those neighbors who still kiss in the garden",
+        "Looking at each other across a room full of people, and smiling like it’s a secret"
+    ];
+
+    let remainingVisions = [];
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+        function showVision() {
+        const visionElement = document.getElementById('visionText');
+        const crystalBall = document.getElementById('crystalBall');
+
+        // Reshuffle if all visions shown
+        if (remainingVisions.length === 0) {
+            remainingVisions = shuffle([...allVisions]);
+        }
+
+        const nextVision = remainingVisions.pop();
+
+        // Fade out current vision
+        visionElement.classList.remove('visible');
+
+        setTimeout(() => {
+            visionElement.textContent = nextVision;
+            visionElement.classList.add('visible');
+        }, 1000);
+
+        // Click glow effect
+        crystalBall.style.transition = 'box-shadow 0.5s ease';
+        crystalBall.style.boxShadow = '0 0 60px 30px rgba(139, 90, 159, 0.6)';
+
+        setTimeout(() => {
+            // Remove inline styles to restore CSS hover behavior
+            crystalBall.style.boxShadow = '';
+            crystalBall.style.transition = '';
+        }, 5000);
+    }
+
+
+        // Initialize crystal ball
+        window.addEventListener('load', () => {
+            const crystalBall = document.getElementById('crystalBall');
+            const visionText = document.getElementById('visionText');
+            
+            crystalBall.addEventListener('click', showVision);
+            
+            // Show first vision automatically after 2 seconds
+            setTimeout(() => {
+                visionText.classList.add('visible');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

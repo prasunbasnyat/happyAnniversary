@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wish Upon a Star</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .star {
+            position: absolute;
+            color: #ffd700;
+            font-size: 1.5rem;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        .falling-star {
+            animation: fall 5s linear forwards;
+        }
+        
+        .wish-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 500px;
+            margin: 3rem auto;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            z-index: 2;
+            position: relative;
+        }
+        
+        .wish-input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid var(--primary-pink);
+            border-radius: 10px;
+            font-size: 1rem;
+            margin: 1rem 0;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .wish-button {
+            background: linear-gradient(45deg, var(--primary-pink), var(--rose-gold));
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .wish-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 193, 204, 0.4);
+        }
+        
+        .wishes-list {
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .wish-item {
+            background: rgba(230, 230, 250, 0.5);
+            padding: 0.5rem 1rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-pink);
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        @keyframes fall {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">💕</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="love-letter.html">Letter</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="reasons.html">Reasons</a></li>
+                <li><a href="future.html">Future</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+                <li><a href="garden.html">Garden</a></li>
+                <li><a href="memories.html">Memories</a></li>
+                <li><a href="compliments.html">Compliments</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="stars-container" id="starsContainer"></div>
+
+    <div class="page-container">
+        <div class="page-content">
+            <h1 class="page-title">Make a Wish</h1>
+            
+            <div class="wish-container">
+                <p style="margin-bottom: 1rem; color: var(--text-light);">Write your wish and and it fly to the stars ⭐</p>
+                <input type="text" class="wish-input" id="wishInput" placeholder="What do you wish for?">
+                <button class="wish-button" onclick="makeWish()">Send to the Stars<3</button>
+                
+                <div class="wishes-list" id="wishesList">
+                    <h3>Your Wishes:</h3>
+                    <div id="wishesContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create twinkling stars background
+        function createStars() {
+            const container = document.getElementById('starsContainer');
+            
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '⭐';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(star);
+            }
+        }
+
+        // Load wishes from localStorage
+        function loadWishes() {
+            const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+            const container = document.getElementById('wishesContainer');
+            
+            container.innerHTML = '';
+            wishes.forEach((wish, index) => {
+                const wishDiv = document.createElement('div');
+                wishDiv.className = 'wish-item';
+                wishDiv.innerHTML = `⭐ ${wish}`;
+                container.appendChild(wishDiv);
+            });
+        }
+
+        // Make a wish function
+        function makeWish() {
+            const input = document.getElementById('wishInput');
+            const wishText = input.value.trim();
+            
+            if (!wishText) return;
+            
+            // Create shooting star
+            const shootingStar = document.createElement('div');
+            shootingStar.className = 'star falling-star';
+            shootingStar.innerHTML = '⭐';
+            shootingStar.style.left = '50%';
+            shootingStar.style.top = '50%';
+            shootingStar.style.fontSize = '6rem';
+            document.getElementById('starsContainer').appendChild(shootingStar);
+            
+            // Remove shooting star after animation
+            setTimeout(() => {
+                shootingStar.remove();
+            }, 3000);
+            
+            // Save wish to localStorage
+            const wishes = JSON.parse(localStorage.getItem('wishes') || '[]');
+            wishes.push(wishText);
+            localStorage.setItem('wishes', JSON.stringify(wishes));
+            
+            // Clear input and reload wishes
+            input.value = '';
+            loadWishes();
+        }
+
+        // Allow Enter key to make wish
+        document.getElementById('wishInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                makeWish();
+            }
+        });
+
+        // Initialize page
+        window.addEventListener('load', () => {
+            createStars();
+            loadWishes();
+        });
+    </script>
+</body>
+</html>

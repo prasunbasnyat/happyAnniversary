@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Growing Garden</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        .garden-container {
+            background: linear-gradient(to bottom, #87CEEB 0%, #98FB98 100%);
+            min-height: 60vh;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .garden-ground {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to bottom, #8B4513, #654321);
+            border-radius: 0 0 15px 15px;
+        }
+        
+        .garden-flowers {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            align-items: flex-end;
+            min-height: 300px;
+            padding-bottom: 2rem;
+        }
+        
+        .flower {
+            font-size: 3rem;
+            animation: bloom 2s ease-out;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .flower:hover {
+            transform: scale(1.2);
+        }
+        
+        .grow-button {
+            background: linear-gradient(45deg, #90EE90, #32CD32);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin: 2rem auto;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .grow-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(50, 205, 50, 0.4);
+        }
+        
+        .visit-counter {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 1.2rem;
+            color: var(--deep-purple);
+        }
+        
+        .flower-note {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 200px;
+            display: none;
+            z-index: 3;
+        }
+        
+        @keyframes bloom {
+            0% {
+                transform: scale(0) rotate(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(-90deg);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">💕</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="love-letter.html">Letter</a></li>
+                <li><a href="music.html">Music</a></li>
+                <li><a href="reasons.html">Reasons</a></li>
+                <li><a href="future.html">Future</a></li>
+                <li><a href="wishes.html">Wishes</a></li>
+                <li><a href="garden.html">Garden</a></li>
+                <li><a href="memories.html">Memories</a></li>
+                <li><a href="compliments.html">Compliments</a></li>
+                <li><a href="calendar.html">Calendar</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div class="page-content">
+            <h1 class="page-title">Our Love Garden</h1>
+            <p style="text-align: center; margin-bottom: 1rem; color: var(--text-light);">Every visit grows a new flower in our garden of love 🌻</p>
+            
+            <div class="visit-counter" id="visitCounter">
+                <!-- Visit count will be displayed here -->
+            </div>
+            
+            <div class="garden-container">
+                <div class="garden-ground"></div>
+                <div class="garden-flowers" id="gardenFlowers">
+                    <!-- Flowers will be added here -->
+                </div>
+            </div>
+            
+            <button class="grow-button" onclick="growFlower()">Plant a New Flower 🌱</button>
+            
+            <div class="flower-note" id="flowerNote"></div>
+        </div>
+    </div>
+
+    <script>
+        const flowers = ['🌸', '🌺', '🌻', '🌷', '🌼', '🌹', '💐', '🌵', '🌴', '🌲'];
+        const flowerMessages = [
+            "Planted with love on your first visit",
+            "Pretty little flower, just like my baby",
+            "Hpayy happy happyyy",
+            "Flowering well because of all your love",
+            "Watered with care",
+            "I love youuuu",
+            "Beautiful and unique, like you",
+            "Yayy our Ezac the cactus is here",
+            "Looks like our future vacations!",
+            "Ahh, this is a big tree!, just like you baby's-"
+        ];
+
+        function getVisitCount() {
+            return parseInt(localStorage.getItem('gardenVisits') || '0');
+        }
+
+        function incrementVisitCount() {
+            const visits = getVisitCount() + 1;
+            localStorage.setItem('gardenVisits', visits.toString());
+            return visits;
+        }
+
+        function getFlowerCount() {
+            return parseInt(localStorage.getItem('flowerCount') || '0');
+        }
+
+        function setFlowerCount(count) {
+            localStorage.setItem('flowerCount', count.toString());
+        }
+
+        function displayVisitCount() {
+            const visits = getVisitCount();
+            const counter = document.getElementById('visitCounter');
+            counter.textContent = `Garden visits: ${visits} 🦋`;
+        }
+
+        function loadGarden() {
+            const flowerCount = getFlowerCount();
+            const container = document.getElementById('gardenFlowers');
+            
+            for (let i = 0; i < flowerCount; i++) {
+                createFlower(i, false);
+            }
+        }
+
+        function createFlower(index, animate = true) {
+            const container = document.getElementById('gardenFlowers');
+            const flowerDiv = document.createElement('div');
+            flowerDiv.className = 'flower';
+            flowerDiv.innerHTML = flowers[index % flowers.length];
+            flowerDiv.title = flowerMessages[index % flowerMessages.length];
+            
+            if (!animate) {
+                flowerDiv.style.animation = 'none';
+            }
+            
+            // Add click event to show message
+            flowerDiv.addEventListener('click', function(e) {
+                showFlowerMessage(e, flowerMessages[index % flowerMessages.length]);
+            });
+            
+            container.appendChild(flowerDiv);
+        }
+
+        function showFlowerMessage(event, message) {
+            const note = document.getElementById('flowerNote');
+            note.textContent = message;
+            note.style.display = 'block';
+            note.style.left = event.pageX + 10 + 'px';
+            note.style.top = event.pageY - 50 + 'px';
+            
+            setTimeout(() => {
+                note.style.display = 'none';
+            }, 3000);
+        }
+
+        function growFlower() {
+            const currentFlowerCount = getFlowerCount();
+            createFlower(currentFlowerCount, true);
+            setFlowerCount(currentFlowerCount + 1);
+        }
+
+        // Auto-grow flower on first visit
+        function checkAutoGrow() {
+            const visits = getVisitCount();
+            const flowerCount = getFlowerCount();
+            
+            if (visits === 0 || flowerCount < visits) {
+                setTimeout(() => {
+                    growFlower();
+                }, 1000);
+            }
+        }
+
+        // Initialize garden
+        window.addEventListener('load', () => {
+            incrementVisitCount();
+            displayVisitCount();
+            loadGarden();
+            checkAutoGrow();
+        });
+    </script>
+</body>
+</html>
